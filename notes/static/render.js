@@ -1,5 +1,17 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'OrbitControls';
+import dat from "https://cdn.skypack.dev/dat.gui";
+
+class user{
+  constructor(){
+    this.vertex = 1;
+    this.fragment = 1;
+    this.detail = 120;
+    this.earth1 = false;
+    this.mars = false;
+    this.earth2 = false;
+  }
+}
 
 var container, //first -- wrap texture, then change some texture colors in fragment shader
   renderer,
@@ -9,6 +21,8 @@ var container, //first -- wrap texture, then change some texture colors in fragm
   start = Date.now(),
   material,
   controls,
+  input,
+  detail,
   fov = 30;
 
 window.addEventListener( 'load', function() {
@@ -30,30 +44,48 @@ window.addEventListener( 'load', function() {
   camera.position.z = 100;
 
 
+  const gui = new dat.GUI()
+
+
   const loader = new THREE.TextureLoader();
   loader.setCrossOrigin('anonymous');
 
-  const texture = loader.load( '/static/world.png' );
+  const earthTexture = loader.load( '/static/earth.png' );
+  const marsTexture = loader.load( '/static/mars.jpg' );
+  const earthTexture2 = loader.load('/static/earth2.png');
 
   const uniforms = {
-    texture1:{value:texture}
+    texture1:{value:earthTexture},
+    scale:{value:3.2}
   };
 
   // create a wireframe material
+  input = new user();
   material = new THREE.ShaderMaterial( {
     uniforms:uniforms,
-    vertexShader: document.getElementById( 'vertexShader' ).textContent,
+    vertexShader: document.getElementById( 'vertexShader1' ).textContent,
     fragmentShader: document.getElementById( 'fragmentShader' ).textContent
   } );
 
   // create a sphere and assign the material
   mesh = new THREE.Mesh(
-    new THREE.IcosahedronGeometry( 20, 25 ),
+    new THREE.IcosahedronGeometry( 20, input.detail),
     material
   );
+  console.log(mesh);
+  
+  var toggle1 = gui.add(input,"earth1").name("earth height map");
+  var toggle2 = gui.add(input,"earth2").name("earth bump map");
+  var toggle3 = gui.add(input,"mars").name("mars height map");
+
+  var slider1 = gui.add(mesh.material.uniforms.scale,"value",1,10).name("scale");
+  toggle1.listen().onChange(function(){input.earth2 = false;input.mars=false;mesh.material.uniforms.texture1.value = loader.load( '/static/earth.png' );});
+  toggle2.listen().onChange(function(){input.earth1 = false;input.mars=false;mesh.material.uniforms.texture1.value = loader.load( '/static/earth2.png' );});
+  toggle3.listen().onChange(function(){input.earth2 = false;input.earth1=false;mesh.material.uniforms.texture1.value = loader.load( '/static/mars.jpg' );});
   scene.add( mesh );
 
   // create the renderer and attach it to the DOM
+
   renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.setPixelRatio( window.devicePixelRatio );
@@ -72,6 +104,8 @@ function render() {
   // let there be light
   controls.update();
   renderer.render( scene, camera );
+  // console.log(input);
+  // mesh.material.needsUpdate = true;
   // mesh.rotation.x += 0.01;
   // controls.update();
 

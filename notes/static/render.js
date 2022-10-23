@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+import { OrbitControls } from 'OrbitControls';
 
 var container, //first -- wrap texture, then change some texture colors in fragment shader
   renderer,
@@ -5,6 +7,7 @@ var container, //first -- wrap texture, then change some texture colors in fragm
   camera,
   mesh,
   start = Date.now(),
+  material,
   controls,
   fov = 30;
 

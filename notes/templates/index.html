@@ -9,8 +9,14 @@
     <div id="container"></div>
   </body>
 
-  <script type="module" src="/static/three.js"></script>
-  <script type="module" src="/static/orbit.js"></script>
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+            "OrbitControls": "https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js"
+        }
+    }
+</script>
 
   <script type="x-shader/x-vertex" id="vertexShader">
 
@@ -38,6 +44,6 @@
     }
   </script>
 
-  <script type="text/javascript" id="mainCode" src="/static/render.js"></script>
+  <script type="module" id="mainCode" src="/static/render.js"></script>
 
 </html>

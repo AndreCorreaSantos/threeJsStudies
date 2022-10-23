@@ -48,7 +48,7 @@ window.addEventListener( 'load', function() {
 
   // create a sphere and assign the material
   mesh = new THREE.Mesh(
-    new THREE.IcosahedronGeometry( 20, 6 ),
+    new THREE.IcosahedronGeometry( 20, 25 ),
     material
   );
   scene.add( mesh );
@@ -59,17 +59,22 @@ window.addEventListener( 'load', function() {
   renderer.setPixelRatio( window.devicePixelRatio );
 
   container.appendChild( renderer.domElement );
-
-  render();
   controls = new OrbitControls( camera, renderer.domElement );
-
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.5;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05; 
+  render();
 } );
 
 function render() {
 
   // let there be light
+  controls.update();
   renderer.render( scene, camera );
   // mesh.rotation.x += 0.01;
+  // controls.update();
+
   requestAnimationFrame( render );
 
 }

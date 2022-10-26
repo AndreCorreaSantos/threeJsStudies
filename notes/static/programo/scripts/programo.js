@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'OrbitControls';
 import dat from "https://cdn.skypack.dev/dat.gui";
+import { blobFragmentShader } from '../shaders/blobFragmentShader.js';
+import { blobVertexShader } from '../shaders/blobVertexShader.js';
+import { boxFragmentShader } from '../shaders/boxFragmentShader.js';
+import { boxVertexShader } from '../shaders/boxVertexShader.js';
 
 var container,
   renderer,
@@ -55,8 +59,8 @@ window.addEventListener( 'load', function() {
         value:[]
       }
     },
-    vertexShader: document.getElementById( 'blobvertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'blobfragmentShader' ).textContent,
+    vertexShader: blobVertexShader,
+    fragmentShader: blobFragmentShader,
   } );
 
   blob2Material = new THREE.ShaderMaterial( {
@@ -73,8 +77,8 @@ window.addEventListener( 'load', function() {
         value:[]
       }
     },
-    vertexShader: document.getElementById( 'blobvertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'blobfragmentShader' ).textContent,
+    vertexShader: blobVertexShader,
+    fragmentShader: blobFragmentShader,
   } );
 
   boxMaterial = new THREE.ShaderMaterial( {
@@ -87,8 +91,8 @@ window.addEventListener( 'load', function() {
         value:[]
       }
     },
-    vertexShader: document.getElementById( 'boxvertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'boxfragmentShader' ).textContent,
+    vertexShader: boxVertexShader,
+    fragmentShader: boxFragmentShader,
   } );
 
 

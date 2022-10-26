@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'OrbitControls';
 import dat from "https://cdn.skypack.dev/dat.gui";
+import {vertexShader} from "../shaders/vertexShader.js"
+import {fragmentShader} from "../shaders/fragmentShader.js"
 
 class user{
   constructor(){
@@ -50,9 +52,9 @@ window.addEventListener( 'load', function() {
   const loader = new THREE.TextureLoader();
   loader.setCrossOrigin('anonymous');
 
-  const earthTexture = loader.load( '/static/earth.png' );
-  const marsTexture = loader.load( '/static/mars.jpg' );
-  const earthTexture2 = loader.load('/static/earth2.png');
+  const earthTexture = loader.load( '/static/techweb/images/earth.png' );
+  const marsTexture = loader.load( '/static/techweb/images/mars.jpg' );
+  const earthTexture2 = loader.load('/static/techweb/images/earth2.png');
 
   const uniforms = {
     texture1:{value:earthTexture},
@@ -61,10 +63,11 @@ window.addEventListener( 'load', function() {
 
   // create a wireframe material
   input = new user();
+
   material = new THREE.ShaderMaterial( {
     uniforms:uniforms,
-    vertexShader: document.getElementById( 'vertexShader1' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader
   } );
 
   // create a sphere and assign the material

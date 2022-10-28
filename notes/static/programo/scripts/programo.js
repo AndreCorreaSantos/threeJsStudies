@@ -18,6 +18,8 @@ var container,
   boxMaterial,
   controls,
   start = Date.now(),
+  cameraDir,
+  cameraVector,
   fov = 30;
 
 window.addEventListener( 'load', function() {
@@ -43,7 +45,8 @@ window.addEventListener( 'load', function() {
   const y_dir = -1.0;
   const z_dir = -1.0;
   var lightDir = [x_dir,y_dir,z_dir];
-
+  cameraVector = new THREE.Vector3( 0, 0, - 1 );
+  cameraVector.applyQuaternion( camera.quaternion );
 
   blobMaterial = new THREE.ShaderMaterial( {
 
@@ -57,6 +60,9 @@ window.addEventListener( 'load', function() {
       },
       color:{
         value:[]
+      },
+      camera:{
+        value:cameraVector
       }
     },
     vertexShader: blobVertexShader,
@@ -146,6 +152,7 @@ window.addEventListener( 'load', function() {
   controls.enableDamping = true;
   controls.dampingFactor = 0.05; 
   blob2.position.x += 50;
+
   render();
 
 } );
@@ -155,7 +162,8 @@ function render() {
   // let there be light
   blobMaterial.uniforms[ 'time' ].value = .00025 * ( Date.now() - start );
   blob2Material.uniforms[ 'time' ].value = .00025 * ( Date.now() - start);
-
+  cameraVector.applyQuaternion( camera.quaternion );
+  blobMaterial.uniforms['camera'].value = cameraVector;
   renderer.render( scene, camera );
   requestAnimationFrame( render );
 

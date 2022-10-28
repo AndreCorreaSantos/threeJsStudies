@@ -29,7 +29,7 @@ window.addEventListener( 'load', function() {
 
   // create a scene
   scene = new THREE.Scene();
-
+  console.log(blobFragmentShader);
   // create a camera the size of the browser window
   // and place it 100 units away, looking towards the center of the scene
   camera = new THREE.PerspectiveCamera(
@@ -62,7 +62,10 @@ window.addEventListener( 'load', function() {
         value:[]
       },
       camera:{
-        value:cameraVector
+        value:[0,0,0]
+      },
+      lightDistance:{
+        value:10.0
       }
     },
     vertexShader: blobVertexShader,
@@ -133,6 +136,7 @@ window.addEventListener( 'load', function() {
   gui.add(colorBlob2,"0",0,1);
   gui.add(colorBlob2,"1",0,1);
   gui.add(colorBlob2,"2",0,1);
+  gui.add(blobMaterial.uniforms['lightDistance'],"value",0.0,100.0);
 
   
   scene.add( blob );
@@ -160,10 +164,14 @@ window.addEventListener( 'load', function() {
 function render() {
 
   // let there be light
+  let worldDir = [0,0,0];
+  worldDir = camera.getWorldDirection(new THREE.Vector3(0,0,0));
+  blobMaterial.uniforms['camera'].value = worldDir;
   blobMaterial.uniforms[ 'time' ].value = .00025 * ( Date.now() - start );
+
   blob2Material.uniforms[ 'time' ].value = .00025 * ( Date.now() - start);
-  cameraVector.applyQuaternion( camera.quaternion );
-  blobMaterial.uniforms['camera'].value = cameraVector;
+
+  // console.log(worldDir);
   renderer.render( scene, camera );
   requestAnimationFrame( render );
 

@@ -41,10 +41,10 @@ window.addEventListener( 'load', function() {
   camera.position.z = 100;
 
   // create a wireframe material
-  const x_dir = 1.0;
-  const y_dir = -1.0;
-  const z_dir = -1.0;
-  var lightDir = [x_dir,y_dir,z_dir];
+  const x_dir = 10.0;
+  const y_dir = 10.0;
+  const z_dir = 10.0;
+  var lightPos = [x_dir,y_dir,z_dir];
   cameraVector = new THREE.Vector3( 0, 0, - 1 );
   cameraVector.applyQuaternion( camera.quaternion );
 
@@ -55,11 +55,11 @@ window.addEventListener( 'load', function() {
         type: "f",
         value: 0.0
       },
-      light:{
-        value:lightDir
+      lightPos:{
+        value:lightPos
       },
       color:{
-        value:[]
+        value:[245.0/255.0,110.0/255.0,2.0/255.0]
       },
       camera:{
         value:[0,0,0]
@@ -71,7 +71,7 @@ window.addEventListener( 'load', function() {
         value:0.0
       },
       shininess:{
-        value:1000.0
+        value:0
       }
 
     },
@@ -83,7 +83,7 @@ window.addEventListener( 'load', function() {
 
     uniforms: {
       light:{
-        value:lightDir
+        value:lightPos
       },
       color:{
         value:[]
@@ -111,12 +111,12 @@ window.addEventListener( 'load', function() {
   var height = 200.0;
 
   const gui = new dat.GUI();
-  gui.add(blob.material.uniforms.light.value,"0",-1,1);
-  gui.add(blob.material.uniforms.light.value,"1",-1,1);
-  gui.add(blob.material.uniforms.light.value,"2",-1,1);
+  gui.add(blob.material.uniforms.lightPos.value,"0",-100,100);
+  gui.add(blob.material.uniforms.lightPos.value,"1",-100,100);
+  gui.add(blob.material.uniforms.lightPos.value,"2",-100,100);
   gui.add(blobMaterial.uniforms['lightDistance'],"value",0.0,100.0).name("lightDistance");
   gui.add(blobMaterial.uniforms['Ls'],"value",0.0,1.0).name("Ls");
-  gui.add(blobMaterial.uniforms['shininess'],"value",0.0,10000.0).name("shininess");
+  gui.add(blobMaterial.uniforms['shininess'],"value",0.0,1000.0).name("shininess");
 
 
   
@@ -127,6 +127,7 @@ window.addEventListener( 'load', function() {
   renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.setPixelRatio( window.devicePixelRatio );
+  renderer.setClearColor( 0xffffff, 0);
 
   container.appendChild( renderer.domElement );
 
@@ -135,7 +136,7 @@ window.addEventListener( 'load', function() {
   controls.autoRotateSpeed = 0.5;
   controls.enableDamping = true;
   controls.dampingFactor = 0.05; 
-
+  
   render();
 
 } );
@@ -146,7 +147,7 @@ function render() {
   cameraDir = camera.getWorldDirection(new THREE.Vector3(0,0,0));
   blobMaterial.uniforms['camera'].value = cameraDir;
   blobMaterial.uniforms[ 'time' ].value = .00025 * ( Date.now() - start );
-
+  
   // console.log(worldDir);
   renderer.render( scene, camera );
   requestAnimationFrame( render );

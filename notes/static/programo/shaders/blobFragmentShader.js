@@ -3,27 +3,35 @@
 export const blobFragmentShader = `
 uniform vec3 light;
 uniform vec3 color;
-uniform vec3 camera;
+uniform vec3 viewPos;
+uniform vec3 viewDir;
+
 uniform float lightDistance;
 uniform float Ls;
 uniform float shininess;
+uniform vec3 lightPos;
+
 varying vec2 vUv;
 varying float noise;
 varying vec3 v_normal;
+varying vec3 FragPos;
 
-vec3 lightDir;
-float ambient = 0.1;
-const vec3 specColor = vec3(1.0, 1.0, 1.0);
+float ambient = 0.3;
+const vec3 specColor = vec3(252./255.0, 252./255.0, 252./255.0);
 
-
+float spec = 0.0;
 void main() {
-  float Lc = 10.0/lightDistance;
-  lightDir = normalize(light);
-  float lambertian = max(dot(v_normal, lightDir), 0.0);
-  vec3 halfDir = normalize(lightDir + light);
-  float specAngle = max(dot(halfDir, v_normal), 0.0);
-  float specular = pow(specAngle, shininess);
-  float dist = 10.0/lightDistance;
-  gl_FragColor = vec4(lambertian*Lc+specular*specColor*Ls+ambient,1.0 );
+  // vec3 lightPos2 = normalize(lightPos);
+  vec3 lightDir   = normalize(lightPos - FragPos);
+  float lamb = max(dot(lightDir, v_normal), 0.0);
+  vec3 lambertian = (lamb+ambient)*color;
+
+  vec3 viewDir    = normalize(viewPos - FragPos);
+  vec3 halfwayDir = normalize(lightDir + viewDir);  
+  spec = pow(max(dot(v_normal, halfwayDir), 0.0), shininess);
+  vec3 specular = specColor * spec;
+
+
+  gl_FragColor = vec4(specular + lambertian,1.0 );
 
 }`

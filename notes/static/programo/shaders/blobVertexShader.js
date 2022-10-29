@@ -179,6 +179,8 @@ float pnoise(vec3 P, vec3 rep)
 
 varying vec2 vUv;
 varying float noise;
+varying vec3 FragPos;
+
 uniform float time;
 
 float turbulence( vec3 p ) {
@@ -207,5 +209,6 @@ vUv = uv;
   vec3 newPosition = position + normal * displacement;
   gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
   v_normal = normal;
+  FragPos = vec3(modelViewMatrix * vec4(position, 1.0));
 }
 `

@@ -17,21 +17,24 @@ varying vec3 v_normal;
 varying vec3 FragPos;
 
 float ambient = 0.3;
-const vec3 specColor = vec3(252./255.0, 252./255.0, 252./255.0);
+vec3 color1 = vec3(31.0/255.0,28.0/255.0,32.0/255.0);
+//const vec3 specColor = vec3(252./255.0, 252./255.0, 252./255.0);
+//const vec3 specColor = vec3(245.0/255.0,110.0/255.0,2.0/255.0);
+const vec3 specColor = vec3(1.0,1.0,1.0);
 
 float spec = 0.0;
 void main() {
   // vec3 lightPos2 = normalize(lightPos);
   vec3 lightDir   = normalize(lightPos - FragPos);
   float lamb = max(dot(lightDir, v_normal), 0.0);
-  vec3 lambertian = (lamb+ambient)*color;
+  vec3 lambertian = (lamb+ambient)*color1;
 
   vec3 viewDir    = normalize(viewPos - FragPos);
   vec3 halfwayDir = normalize(lightDir + viewDir);  
-  spec = pow(max(dot(v_normal, halfwayDir), 0.0), shininess);
+  spec = pow(max(dot(v_normal, halfwayDir), 0.0), shininess*2.);
   vec3 specular = specColor * spec;
 
 
-  gl_FragColor = vec4(specular + lambertian,1.0 );
+  gl_FragColor = vec4(specular + 2.*lambertian,1.0 );
 
 }`

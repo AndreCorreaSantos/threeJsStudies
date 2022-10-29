@@ -59,7 +59,8 @@ window.addEventListener( 'load', function() {
         value:lightPos
       },
       color:{
-        value:[245.0/255.0,110.0/255.0,2.0/255.0]
+        value:[31.0/255.0,28.0/255.0,32.0/255.0]
+        //value:[245.0/255.0,110.0/255.0,2.0/255.0]
       },
       camera:{
         value:[0,0,0]

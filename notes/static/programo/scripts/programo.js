@@ -29,7 +29,7 @@ window.addEventListener( 'load', function() {
 
   // create a scene
   scene = new THREE.Scene();
-  console.log(blobFragmentShader);
+  // console.log(blobFragmentShader);
   // create a camera the size of the browser window
   // and place it 100 units away, looking towards the center of the scene
   camera = new THREE.PerspectiveCamera(
@@ -103,10 +103,10 @@ window.addEventListener( 'load', function() {
   var colorBlob = [229.0/255.0,118.0/255.0,46.0/255.0];
   blob.material.uniforms.color.value = colorBlob;
 
-  box = new THREE.Mesh(
-    new THREE.BoxGeometry(500,500,500,1,1,1),
-    boxMaterial
-  );
+  // box = new THREE.Mesh(
+  //   new THREE.BoxGeometry(500,500,500,1,1,1),
+  //   boxMaterial
+  // );
 
   var width = 2.0;
   var height = 200.0;
@@ -122,7 +122,7 @@ window.addEventListener( 'load', function() {
 
   
   scene.add( blob );
-  scene.add(box);
+  // scene.add(box);
 
   // create the renderer and attach it to the DOM
   renderer = new THREE.WebGLRenderer({antialias:true});

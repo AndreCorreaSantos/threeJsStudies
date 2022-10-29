@@ -31,7 +31,7 @@ void main() {
 
   vec3 viewDir    = normalize(viewPos - FragPos);
   vec3 halfwayDir = normalize(lightDir + viewDir);  
-  spec = pow(max(dot(v_normal, halfwayDir), 0.0), shininess*2.);
+  spec = pow(max(dot(v_normal, halfwayDir), 0.0), 1.2);
   vec3 specular = specColor * spec;
 
 

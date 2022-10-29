@@ -66,25 +66,14 @@ window.addEventListener( 'load', function() {
       },
       lightDistance:{
         value:10.0
-      }
-    },
-    vertexShader: blobVertexShader,
-    fragmentShader: blobFragmentShader,
-  } );
-
-  blob2Material = new THREE.ShaderMaterial( {
-
-    uniforms: {
-      time: {
-        type: "f",
-        value: 0.0
       },
-      light:{
-        value:lightDir
+      Ls:{
+        value:0.0
       },
-      color:{
-        value:[]
+      shininess:{
+        value:1000.0
       }
+
     },
     vertexShader: blobVertexShader,
     fragmentShader: blobFragmentShader,
@@ -113,13 +102,6 @@ window.addEventListener( 'load', function() {
   var colorBlob = [229.0/255.0,118.0/255.0,46.0/255.0];
   blob.material.uniforms.color.value = colorBlob;
 
-  blob2 = new THREE.Mesh(
-    new THREE.IcosahedronGeometry( 20, 120 ),
-    blob2Material
-  );
-  var colorBlob2 = [1,1,1];
-  blob2.material.uniforms.color.value = colorBlob2;
-
   box = new THREE.Mesh(
     new THREE.BoxGeometry(500,500,500,1,1,1),
     boxMaterial
@@ -132,15 +114,13 @@ window.addEventListener( 'load', function() {
   gui.add(blob.material.uniforms.light.value,"0",-1,1);
   gui.add(blob.material.uniforms.light.value,"1",-1,1);
   gui.add(blob.material.uniforms.light.value,"2",-1,1);
-  
-  gui.add(colorBlob2,"0",0,1);
-  gui.add(colorBlob2,"1",0,1);
-  gui.add(colorBlob2,"2",0,1);
-  gui.add(blobMaterial.uniforms['lightDistance'],"value",0.0,100.0);
+  gui.add(blobMaterial.uniforms['lightDistance'],"value",0.0,100.0).name("lightDistance");
+  gui.add(blobMaterial.uniforms['Ls'],"value",0.0,1.0).name("Ls");
+  gui.add(blobMaterial.uniforms['shininess'],"value",0.0,10000.0).name("shininess");
+
 
   
   scene.add( blob );
-  scene.add(blob2);
   scene.add(box);
 
   // create the renderer and attach it to the DOM
@@ -155,7 +135,6 @@ window.addEventListener( 'load', function() {
   controls.autoRotateSpeed = 0.5;
   controls.enableDamping = true;
   controls.dampingFactor = 0.05; 
-  blob2.position.x += 50;
 
   render();
 
@@ -164,12 +143,9 @@ window.addEventListener( 'load', function() {
 function render() {
 
   // let there be light
-  let worldDir = [0,0,0];
-  worldDir = camera.getWorldDirection(new THREE.Vector3(0,0,0));
-  blobMaterial.uniforms['camera'].value = worldDir;
+  cameraDir = camera.getWorldDirection(new THREE.Vector3(0,0,0));
+  blobMaterial.uniforms['camera'].value = cameraDir;
   blobMaterial.uniforms[ 'time' ].value = .00025 * ( Date.now() - start );
-
-  blob2Material.uniforms[ 'time' ].value = .00025 * ( Date.now() - start);
 
   // console.log(worldDir);
   renderer.render( scene, camera );
